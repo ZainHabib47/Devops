@@ -1,33 +1,84 @@
-CI/CD Pipeline for Docker Deployment
+name: CI/CD Pipeline for Docker Deployment
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]   # Runs this pipeline every time code is pushed to main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout Repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker
+      # Step 2: Set up Docker
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # Step 3: Build Docker Image
       - name: Build Docker Image
-        run: docker build -t myapp:latest .
+        run: docker build -t ${{ github.repository }}:latest .
 
+      # Step 4: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Step 5: Tag & Push Image to Docker Hub
       - name: Push Image to Docker Hub
-        run: docker push myapp:latest
+        run: |
+          docker tag ${{ github.repository }}:latest ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
 
+      # Step 6: Deploy the Container (Demo Deployment)
       - name: Deploy Container
         run: |
-          echo "Deploying Docker Container..."
-          docker run -d -p 8000:8000 myapp:latest
+          echo "🚀 Starting deployment..."
+          docker run -d -p 8000:8000 ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+          echo "✅ Application deployed successfully and running on port 8000"
+name: CI/CD Pipeline for Docker Deployment
+
+on:
+  push:
+    branches: [ "main" ]   # Runs this pipeline every time code is pushed to main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Step 3: Build Docker Image
+      - name: Build Docker Image
+        run: docker build -t ${{ github.repository }}:latest .
+
+      # Step 4: Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step 5: Tag & Push Image to Docker Hub
+      - name: Push Image to Docker Hub
+        run: |
+          docker tag ${{ github.repository }}:latest ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+
+      # Step 6: Deploy the Container (Demo Deployment)
+      - name: Deploy Container
+        run: |
+          echo "🚀 Starting deployment..."
+          docker run -d -p 8000:8000 ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+          echo "✅ Application deployed successfully and running on port 8000"
