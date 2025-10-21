@@ -1,0 +1,14 @@
+Task 4: Explanation – CI/CD Benefits
+Continuous Integration (CI) and Continuous Deployment (CD) streamline software delivery by automating repetitive tasks.
+
+Automation: Every time code is pushed, the pipeline automatically builds and deploys the new version without manual intervention.
+
+Faster Releases: Reduces time between code updates and deployment.
+
+Error Reduction: Detects issues early through automated builds and tests.
+
+Consistency: Ensures each deployment follows the same steps, avoiding “it works on my machine” problems.
+
+Productivity: Developers focus on writing code instead of manual deployment.
+
+In short, CI/CD ensures reliable, fast, and repeatable deployments, improving both development speed and software quality.
